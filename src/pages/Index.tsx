@@ -13,16 +13,16 @@ const Index = () => {
   const [support, setSupport] = useState<string>('basic');
 
   const calculatePrice = () => {
-    let basePrice = bandwidth * 1500;
+    let basePrice = bandwidth * 800;
     
     if (locations > 1) {
-      basePrice += (locations - 1) * 50000;
+      basePrice += (locations - 1) * 15000;
     }
     
     if (support === 'priority') {
-      basePrice *= 1.3;
+      basePrice *= 1.15;
     } else if (support === 'vip') {
-      basePrice *= 1.5;
+      basePrice *= 1.25;
     }
     
     return Math.round(basePrice);
@@ -33,7 +33,7 @@ const Index = () => {
       id: 'starter',
       name: 'Starter',
       speed: '100 Мбит/с',
-      price: '150 000 ₽',
+      price: '80 000 ₽',
       period: '/месяц',
       features: [
         'Выделенный канал 100 Мбит/с',
@@ -49,7 +49,7 @@ const Index = () => {
       id: 'professional',
       name: 'Professional',
       speed: '500 Мбит/с',
-      price: '650 000 ₽',
+      price: '350 000 ₽',
       period: '/месяц',
       popular: true,
       features: [
@@ -68,7 +68,7 @@ const Index = () => {
       id: 'enterprise',
       name: 'Enterprise',
       speed: '1 Гбит/с',
-      price: '1 200 000 ₽',
+      price: '650 000 ₽',
       period: '/месяц',
       features: [
         'Выделенный канал 1 Гбит/с',
