@@ -173,7 +173,7 @@ const Index = () => {
               <Icon name="Sparkles" size={16} className="mr-2" />
               Новое поколение прокси-сервисов
             </Badge>
-            <h1 className="text-5xl md:text-7xl font-bold leading-tight">Аренда безлимитных прокси РФ с оплатой за полосу</h1>
+            <h1 className="md:text-7xl font-bold leading-tight my-5 text-3xl text-slate-400">Аренда безлимитных прокси РФ с оплатой за ширину канала</h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Премиальные прокси-серверы с гарантированной скоростью от 100 Мбит/с. 
               Полный контроль, максимальная производительность, безупречная стабильность.
