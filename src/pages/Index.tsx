@@ -3,10 +3,30 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
+import { Slider } from '@/components/ui/slider';
 import Icon from '@/components/ui/icon';
 
 const Index = () => {
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+  const [bandwidth, setBandwidth] = useState<number>(100);
+  const [locations, setLocations] = useState<number>(1);
+  const [support, setSupport] = useState<string>('basic');
+
+  const calculatePrice = () => {
+    let basePrice = bandwidth * 1500;
+    
+    if (locations > 1) {
+      basePrice += (locations - 1) * 50000;
+    }
+    
+    if (support === 'priority') {
+      basePrice *= 1.3;
+    } else if (support === 'vip') {
+      basePrice *= 1.5;
+    }
+    
+    return Math.round(basePrice);
+  };
 
   const plans = [
     {
@@ -239,6 +259,142 @@ const Index = () => {
                 </CardContent>
               </Card>
             ))}
+          </div>
+          
+          <div className="mt-20">
+            <Card className="border-2 border-primary/50 bg-card/50 backdrop-blur-sm overflow-hidden">
+              <CardHeader className="text-center pb-8">
+                <div className="inline-block mx-auto mb-4">
+                  <Badge className="gradient-bg text-white border-0 px-4 py-1.5">
+                    <Icon name="Calculator" size={16} className="mr-2" />
+                    Калькулятор стоимости
+                  </Badge>
+                </div>
+                <CardTitle className="text-3xl mb-2">Рассчитайте индивидуальный тариф</CardTitle>
+                <CardDescription className="text-base">
+                  Настройте параметры под свои задачи и узнайте точную стоимость
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-8 pb-8">
+                <div className="grid md:grid-cols-2 gap-8">
+                  <div className="space-y-6">
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-center">
+                        <label className="text-lg font-semibold">Полоса пропускания</label>
+                        <Badge variant="outline" className="text-lg font-bold gradient-text">
+                          {bandwidth} Мбит/с
+                        </Badge>
+                      </div>
+                      <Slider
+                        value={[bandwidth]}
+                        onValueChange={(value) => setBandwidth(value[0])}
+                        min={100}
+                        max={1000}
+                        step={50}
+                        className="py-4"
+                      />
+                      <div className="flex justify-between text-sm text-muted-foreground">
+                        <span>100 Мбит/с</span>
+                        <span>1 Гбит/с</span>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-center">
+                        <label className="text-lg font-semibold">Количество geo-локаций</label>
+                        <Badge variant="outline" className="text-lg font-bold gradient-text">
+                          {locations}
+                        </Badge>
+                      </div>
+                      <Slider
+                        value={[locations]}
+                        onValueChange={(value) => setLocations(value[0])}
+                        min={1}
+                        max={10}
+                        step={1}
+                        className="py-4"
+                      />
+                      <div className="flex justify-between text-sm text-muted-foreground">
+                        <span>1 локация</span>
+                        <span>10 локаций</span>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      <label className="text-lg font-semibold">Уровень поддержки</label>
+                      <div className="grid grid-cols-3 gap-3">
+                        <Button
+                          variant={support === 'basic' ? 'default' : 'outline'}
+                          className={support === 'basic' ? 'gradient-bg text-white' : ''}
+                          onClick={() => setSupport('basic')}
+                        >
+                          Базовая
+                        </Button>
+                        <Button
+                          variant={support === 'priority' ? 'default' : 'outline'}
+                          className={support === 'priority' ? 'gradient-bg text-white' : ''}
+                          onClick={() => setSupport('priority')}
+                        >
+                          Приоритетная
+                        </Button>
+                        <Button
+                          variant={support === 'vip' ? 'default' : 'outline'}
+                          className={support === 'vip' ? 'gradient-bg text-white' : ''}
+                          onClick={() => setSupport('vip')}
+                        >
+                          VIP
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col justify-center">
+                    <div className="bg-gradient-to-br from-purple-600/10 via-blue-500/10 to-pink-500/10 rounded-2xl p-8 border-2 border-primary/30">
+                      <div className="text-center space-y-6">
+                        <div>
+                          <p className="text-sm text-muted-foreground mb-2">Итоговая стоимость</p>
+                          <p className="text-6xl font-bold gradient-text mb-1">
+                            {calculatePrice().toLocaleString('ru-RU')} ₽
+                          </p>
+                          <p className="text-muted-foreground">/месяц</p>
+                        </div>
+                        
+                        <div className="space-y-3 text-left pt-4">
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-muted-foreground">Полоса пропускания:</span>
+                            <span className="font-semibold">{bandwidth} Мбит/с</span>
+                          </div>
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-muted-foreground">Geo-локации:</span>
+                            <span className="font-semibold">{locations} шт</span>
+                          </div>
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-muted-foreground">Поддержка:</span>
+                            <span className="font-semibold">
+                              {support === 'basic' ? 'Базовая' : support === 'priority' ? 'Приоритетная' : 'VIP'}
+                            </span>
+                          </div>
+                          <div className="h-px bg-border my-3" />
+                          <div className="flex items-center gap-2 text-sm text-green-500">
+                            <Icon name="CheckCircle2" size={16} />
+                            <span>Безлимитный трафик включен</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-sm text-green-500">
+                            <Icon name="CheckCircle2" size={16} />
+                            <span>99.9%+ uptime гарантия</span>
+                          </div>
+                        </div>
+
+                        <Button size="lg" className="w-full gradient-bg text-white text-lg py-6">
+                          <Icon name="ShoppingCart" size={20} className="mr-2" />
+                          Заказать тариф
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
